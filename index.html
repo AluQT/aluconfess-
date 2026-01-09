@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>AluJanu</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Pacifico&display=swap');
@@ -20,13 +21,46 @@ body {
     color: #ffd6e7;
 }
 
+/* ---------- INTRO ---------- */
+#intro {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at center, #2a0e1d, #070308);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: introFade 2.5s forwards;
+}
+
+.intro-text {
+    font-family: 'Pacifico', cursive;
+    font-size: 34px;
+    color: #ff9acb;
+    text-align: center;
+    animation: introText 2.5s forwards;
+}
+
+@keyframes introText {
+    0% { opacity: 0; transform: scale(0.8); }
+    30% { opacity: 1; transform: scale(1.05); }
+    70% { opacity: 1; }
+    100% { opacity: 0; transform: scale(1.2); }
+}
+
+@keyframes introFade {
+    0% { opacity: 1; }
+    100% { opacity: 0; pointer-events: none; }
+}
+
+/* ---------- CANVAS ---------- */
 canvas {
     position: fixed;
     inset: 0;
     z-index: 0;
 }
 
-
+/* ---------- GLASS ---------- */
 .glass {
     position: relative;
     z-index: 1;
@@ -44,7 +78,7 @@ canvas {
         0 0 80px rgba(255,105,180,0.22),
         inset 0 0 40px rgba(255,255,255,0.06);
     text-align: center;
-    
+    display: none; /* hidden until intro ends */
 }
 
 /* ---------- TITLE ---------- */
@@ -57,7 +91,7 @@ canvas {
 
 /* ---------- TABS ---------- */
 .tabs {
-    display: flex;
+    display: none;
     justify-content: center;
     gap: 14px;
     margin-bottom: 26px;
@@ -86,14 +120,13 @@ canvas {
     to { opacity: 1; transform: translateY(0); }
 }
 
-
+/* ---------- MAIN ---------- */
 .pfp-container {
     display: flex;
     justify-content: center;
     gap: 26px; 
     margin-bottom: 22px;
 }
-
 
 .pfp {
     width: 110px;
@@ -102,10 +135,7 @@ canvas {
     background-size: cover;
     background-position: center;
     border: 3px solid rgba(255,154,203,0.8);
-    box-shadow:
-        0 0 30px rgba(255,105,180,0.55),
-        inset 0 0 20px rgba(255,255,255,0.25);
-    margin-bottom: 10px;
+    box-shadow: 0 0 30px rgba(255,105,180,0.55);
     animation: glow 3s infinite alternate;
 }
 
@@ -114,11 +144,7 @@ canvas {
     to { box-shadow: 0 0 40px rgba(255,105,180,0.75); }
 }
 
-.name {
-    font-size: 14px;
-    opacity: 0.9;
-}
-
+.name { font-size: 14px; opacity: 0.9; }
 
 .days span {
     font-size: 52px;
@@ -127,24 +153,11 @@ canvas {
     text-shadow: 0 0 22px rgba(255,127,191,0.7);
 }
 
-.target {
-    margin-top: 10px;
-    font-size: 14px;
-    opacity: 0.85;
-}
+.target { margin-top: 10px; font-size: 14px; opacity: 0.85; }
 
-
-.about {
-    font-size: 14px;
-    line-height: 1.8;
-    opacity: 0.88;
-}
-
-.about span {
-    color: #ff9acb;
-    font-weight: 500;
-}
-
+/* ---------- ABOUT ---------- */
+.about { font-size: 14px; line-height: 1.8; opacity: 0.88; }
+.about span { color: #ff9acb; font-weight: 500; }
 
 .footer {
     margin-top: 22px;
@@ -153,50 +166,64 @@ canvas {
     font-style: italic;
 }
 
-@media (max-width: 600px) {
-    .glass {
-        width: 90vw;
-        padding: 28px 22px;
-        border-radius: 26px;
-    }
-
-    .pfp {
-        width: 90px;
-        height: 90px;
-    }
-
-    .days span {
-        font-size: 44px;
-    }
+/* ---------- LOGIN ---------- */
+.login-input {
+    width: 75%;
+    padding: 12px 16px;
+    border-radius: 14px;
+    border: none;
+    outline: none;
+    background: rgba(255,154,203,0.18);
+    color: #ffd6e7;
+    text-align: center;
 }
 
-@media (min-width: 1400px) {
-    .glass {
-        transform: scale(1.05);
-    }
+.login-btn {
+    padding: 10px 28px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    background: rgba(255,154,203,0.35);
+    color: #ffd6e7;
+    box-shadow: 0 0 20px rgba(255,154,203,0.55);
 }
 
+.error { margin-top: 12px; font-size: 12px; color: #ff7fbf; }
 </style>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 </head>
 
-<audio id="bgMusic" src="music.mp3" preload="auto"></audio>
 <body>
 
+<!-- INTRO -->
+<div id="intro">
+    <div class="intro-text">Made with love<br>for you 💗</div>
+</div>
+
 <canvas id="particles"></canvas>
+<audio id="bgMusic" src="music.mp3" preload="auto"></audio>
 
-<div class="glass">
+<div class="glass" id="glass">
 
-    <div class="title">Always You</div>
+    <div class="title" id="titleText">Sign in to Heart</div>
 
-    <div class="tabs">
+    <div class="tabs" id="tabs">
         <div class="tab active" onclick="openTab('main', this)">Main</div>
         <div class="tab" onclick="openTab('about', this)">More</div>
     </div>
 
+    <!-- LOGIN -->
+    <div id="login" class="content active">
+        <div class="about">
+            <span>Enter the secret 💗</span><br><br>
+            <input id="passInput" type="password" class="login-input" placeholder="Password">
+            <br><br>
+            <button class="login-btn" onclick="checkPass()">Unlock 💞</button>
+            <div id="errorMsg" class="error"></div>
+        </div>
+    </div>
+
     <!-- MAIN -->
-    <div id="main" class="content active">
+    <div id="main" class="content">
         <div class="pfp-container">
             <div>
                 <div class="pfp" style="background-image:url('alu.png')"></div>
@@ -209,21 +236,17 @@ canvas {
         </div>
 
         <div class="days">
-            <span id="dayCount">0</span><br>
-            days together
+            <span id="dayCount">0</span><br>days together
         </div>
-
         <div class="target">Targeted Days : ∞</div>
     </div>
 
-
+    <!-- ABOUT -->
     <div id="about" class="content">
         <div class="about">
             Hey, I’m <span>Alu</span><br><br>
             Soft heart, strong intentions.<br>
-            I believe love grows with effort, patience and loyalty.<br>
-            bringing emotions on screen.<br><br>
-            <span>Not perfect — but real.</span>
+            Not perfect — but real.
         </div>
     </div>
 
@@ -232,7 +255,30 @@ canvas {
 </div>
 
 <script>
+/* ---------- INTRO LOGIC ---------- */
+setTimeout(() => {
+    document.getElementById("intro").style.display = "none";
+    document.getElementById("glass").style.display = "block";
+}, 2500);
 
+/* ---------- LOGIN ---------- */
+const PASSWORD = "UQT";
+const music = document.getElementById("bgMusic");
+
+function checkPass() {
+    if (passInput.value === PASSWORD) {
+        login.classList.remove("active");
+        main.classList.add("active");
+        tabs.style.display = "flex";
+        titleText.innerText = "Always You";
+        music.volume = 0.6;
+        music.play();
+    } else {
+        errorMsg.innerText = "Wrong password 💔";
+    }
+}
+
+/* ---------- TABS ---------- */
 function openTab(id, el) {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
@@ -240,16 +286,11 @@ function openTab(id, el) {
     document.getElementById(id).classList.add('active');
 }
 
+/* ---------- DAYS ---------- */
+const startDate = new Date(2026, 0, 10);
+dayCount.innerText = Math.floor((new Date() - startDate) / 86400000);
 
-const startDate = new Date(2026, 0, 10); //prupose day !!!
-function updateDays() {
-    const now = new Date();
-    document.getElementById("dayCount").innerText =
-        Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
-}
-updateDays();
-
-
+/* ---------- PARTICLES ---------- */
 const canvas = document.getElementById("particles");
 const ctx = canvas.getContext("2d");
 
@@ -276,37 +317,21 @@ function drawHeart(x, y, s, o) {
     ctx.fill();
 }
 
-const music = document.getElementById("bgMusic");
-
-function playMusic() {
-    music.volume = 0.6; 
-    music.play().catch(() => {
-       
-        document.body.addEventListener("click", () => {
-            music.play();
-        }, { once: true });
-    });
-}
-
-window.addEventListener("load", playMusic);
-
-function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    hearts.forEach(h => {
-        drawHeart(h.x, h.y, h.s, h.o);
+(function animate() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    hearts.forEach(h=>{
+        drawHeart(h.x,h.y,h.s,h.o);
         h.y -= h.dy;
-        if (h.y < -20) {
+        if(h.y < -20){
             h.y = canvas.height + 20;
             h.x = Math.random() * canvas.width;
         }
     });
     requestAnimationFrame(animate);
-}
-animate();
+})();
 
 window.addEventListener("resize", resize);
 </script>
-
 
 </body>
 </html>
