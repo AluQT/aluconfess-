@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AluJanu</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Pacifico&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    height: 100vh;
+    overflow: hidden;
+    background: radial-gradient(circle at top, #1b0a14, #070308);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    color: #ffd6e7;
+}
+
+canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+}
+
+
+.glass {
+    position: relative;
+    z-index: 1;
+    width: 460px;
+    padding: 38px;
+    border-radius: 32px;
+    background: linear-gradient(
+        145deg,
+        rgba(255,182,213,0.12),
+        rgba(255,182,213,0.04)
+    );
+    backdrop-filter: blur(28px);
+    border: 1px solid rgba(255,182,213,0.28);
+    box-shadow:
+        0 0 80px rgba(255,105,180,0.22),
+        inset 0 0 40px rgba(255,255,255,0.06);
+    text-align: center;
+    
+}
+
+/* ---------- TITLE ---------- */
+.title {
+    font-family: 'Pacifico', cursive;
+    font-size: 30px;
+    color: #ff9acb;
+    margin-bottom: 18px;
+}
+
+/* ---------- TABS ---------- */
+.tabs {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 26px;
+}
+
+.tab {
+    padding: 7px 22px;
+    border-radius: 999px;
+    font-size: 13px;
+    cursor: pointer;
+    background: rgba(255,154,203,0.12);
+    color: #ffc1dc;
+    transition: 0.35s;
+}
+
+.tab.active {
+    background: rgba(255,154,203,0.35);
+    box-shadow: 0 0 18px rgba(255,154,203,0.6);
+}
+
+.content { display: none; animation: fade 0.5s ease; }
+.content.active { display: block; }
+
+@keyframes fade {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+.pfp-container {
+    display: flex;
+    justify-content: center;
+    gap: 26px; 
+    margin-bottom: 22px;
+}
+
+
+.pfp {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    border: 3px solid rgba(255,154,203,0.8);
+    box-shadow:
+        0 0 30px rgba(255,105,180,0.55),
+        inset 0 0 20px rgba(255,255,255,0.25);
+    margin-bottom: 10px;
+    animation: glow 3s infinite alternate;
+}
+
+@keyframes glow {
+    from { box-shadow: 0 0 20px rgba(255,105,180,0.4); }
+    to { box-shadow: 0 0 40px rgba(255,105,180,0.75); }
+}
+
+.name {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+
+.days span {
+    font-size: 52px;
+    font-weight: 600;
+    color: #ff7fbf;
+    text-shadow: 0 0 22px rgba(255,127,191,0.7);
+}
+
+.target {
+    margin-top: 10px;
+    font-size: 14px;
+    opacity: 0.85;
+}
+
+
+.about {
+    font-size: 14px;
+    line-height: 1.8;
+    opacity: 0.88;
+}
+
+.about span {
+    color: #ff9acb;
+    font-weight: 500;
+}
+
+
+.footer {
+    margin-top: 22px;
+    font-size: 12px;
+    opacity: 0.55;
+    font-style: italic;
+}
+
+@media (max-width: 600px) {
+    .glass {
+        width: 90vw;
+        padding: 28px 22px;
+        border-radius: 26px;
+    }
+
+    .pfp {
+        width: 90px;
+        height: 90px;
+    }
+
+    .days span {
+        font-size: 44px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .glass {
+        transform: scale(1.05);
+    }
+}
+
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+
+<audio id="bgMusic" src="music.mp3" preload="auto"></audio>
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="glass">
+
+    <div class="title">Always You</div>
+
+    <div class="tabs">
+        <div class="tab active" onclick="openTab('main', this)">Main</div>
+        <div class="tab" onclick="openTab('about', this)">More</div>
+    </div>
+
+    <!-- MAIN -->
+    <div id="main" class="content active">
+        <div class="pfp-container">
+            <div>
+                <div class="pfp" style="background-image:url('alu.png')"></div>
+                <div class="name">Alu</div>
+            </div>
+            <div>
+                <div class="pfp" style="background-image:url('qt.jpg')"></div>
+                <div class="name">Her</div>
+            </div>
+        </div>
+
+        <div class="days">
+            <span id="dayCount">0</span><br>
+            days together
+        </div>
+
+        <div class="target">Targeted Days : ∞</div>
+    </div>
+
+
+    <div id="about" class="content">
+        <div class="about">
+            Hey, I’m <span>Alu</span><br><br>
+            Soft heart, strong intentions.<br>
+            I believe love grows with effort, patience and loyalty.<br>
+            bringing emotions on screen.<br><br>
+            <span>Not perfect — but real.</span>
+        </div>
+    </div>
+
+    <div class="footer">bg music is only for "You" 🎵</div>
+
+</div>
+
+<script>
+
+function openTab(id, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById(id).classList.add('active');
+}
+
+
+const startDate = new Date(2026, 0, 10); //prupose day !!!
+function updateDays() {
+    const now = new Date();
+    document.getElementById("dayCount").innerText =
+        Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
+}
+updateDays();
+
+
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+
+function resize() {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+}
+resize();
+
+let hearts = Array.from({ length: 40 }, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    s: Math.random() * 10 + 8,
+    dy: Math.random() * 0.3 + 0.1,
+    o: Math.random() * 0.4 + 0.3
+}));
+
+function drawHeart(x, y, s, o) {
+    ctx.fillStyle = `rgba(255,154,203,${o})`;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.bezierCurveTo(x - s/2, y - s/2, x - s, y + s/3, x, y + s);
+    ctx.bezierCurveTo(x + s, y + s/3, x + s/2, y - s/2, x, y);
+    ctx.fill();
+}
+
+const music = document.getElementById("bgMusic");
+
+function playMusic() {
+    music.volume = 0.6; 
+    music.play().catch(() => {
+       
+        document.body.addEventListener("click", () => {
+            music.play();
+        }, { once: true });
+    });
+}
+
+window.addEventListener("load", playMusic);
+
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    hearts.forEach(h => {
+        drawHeart(h.x, h.y, h.s, h.o);
+        h.y -= h.dy;
+        if (h.y < -20) {
+            h.y = canvas.height + 20;
+            h.x = Math.random() * canvas.width;
+        }
+    });
+    requestAnimationFrame(animate);
+}
+animate();
+
+window.addEventListener("resize", resize);
+</script>
+
+
+</body>
+</html>
